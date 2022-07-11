@@ -29,17 +29,20 @@ def createMaze2():
 
     return maze
 
-#   We create the maze, it must be noted that the goal must be on the
-#   First row or else the print wont work entirely
+#   We create the maze
+#   # - Wall
+#   O - Goal
+#   X - Start
+#   + - path
 
 def createMaze3():
     maze = []
-    maze.append(["#", "O", "#", "#", "#", "#"])
-    maze.append(["#", " ", "#", " ", " ", "#"])
+    maze.append(["#", "#", "#", "#", "#", "#"])
+    maze.append(["#", "X", "#", " ", " ", "#"])
     maze.append(["#", " ", " ", " ", " ", "#"])
     maze.append(["#", "#", "#", " ", " ", "#"])
     maze.append(["#", " ", "#", " ", " ", "#"])
-    maze.append(["#", " ", " ", " ", "X", "#"])
+    maze.append(["#", " ", " ", " ", "O", "#"])
     maze.append(["#", "#", "#", "#", "#", "#"])
 
     return maze
@@ -47,12 +50,14 @@ def createMaze3():
 
 def printMaze(maze, path=""):
     #   This wont work if the goal is not on the first row.
-    for x, pos in enumerate(maze[0]):
-        if pos == "O":
-            start = x
+    for j in range(0, len(maze)):
+        for x, pos in enumerate(maze[j]):
+            if pos == "O":
+                start_x = x
+                start_y = j
 
-    i = start
-    j = 0
+    i = start_x
+    j = 0 + start_y
     pos = set()
     for move in path:
         if move == "L":
@@ -79,12 +84,14 @@ def printMaze(maze, path=""):
 
 
 def valid(maze, moves):
-    for x, pos in enumerate(maze[0]):
-        if pos == "O":
-            start = x
+    for j in range(0, len(maze)):
+        for x, pos in enumerate(maze[j]):
+            if pos == "O":
+                start_x = x
+                start_y = j
 
-    i = start
-    j = 0
+    i = start_x
+    j = 0 + start_y
     for move in moves:
         if move == "L":
             i -= 1
@@ -107,12 +114,14 @@ def valid(maze, moves):
 
 
 def findEnd(maze, moves):
-    for x, pos in enumerate(maze[0]):
-        if pos == "O":
-            start = x
+    for j in range(0, len(maze)):
+        for x, pos in enumerate(maze[j]):
+            if pos == "O":
+                start_x = x
+                start_y = j
 
-    i = start
-    j = 0
+    i = start_x
+    j = 0 + start_y
     for move in moves:
         if move == "L":
             i -= 1
@@ -127,7 +136,7 @@ def findEnd(maze, moves):
             j += 1
 
     if maze[j][i] == "X":
-        print("Found: " + moves)
+        print("\nFound: " + moves)
         printMaze(maze, moves)
         return True
 
@@ -136,6 +145,7 @@ def findEnd(maze, moves):
 
 # MAIN ALGORITHM
 
+#FI-FO Queue
 nums = queue.Queue()
 nums.put("")
 add = ""
@@ -143,7 +153,7 @@ maze  = createMaze3()
 
 while not findEnd(maze, add): 
     add = nums.get()
-    #print(add)
+    print(add)
     for j in ["L", "R", "U", "D"]:
         put = add + j
         if valid(maze, put):
